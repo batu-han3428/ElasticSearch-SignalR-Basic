@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34322.80
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "signalrtimezone", "signalrtimezone\signalrtimezone.csproj", "{558DB29B-6749-4BB1-BA4E-83DAE8DE0587}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{558DB29B-6749-4BB1-BA4E-83DAE8DE0587}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{558DB29B-6749-4BB1-BA4E-83DAE8DE0587}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{558DB29B-6749-4BB1-BA4E-83DAE8DE0587}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{558DB29B-6749-4BB1-BA4E-83DAE8DE0587}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {15FCE105-2E48-4FD5-8104-9F5ADCE76509}
+	EndGlobalSection
+EndGlobal

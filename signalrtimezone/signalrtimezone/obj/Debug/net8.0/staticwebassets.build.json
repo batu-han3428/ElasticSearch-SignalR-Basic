@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "5+V6XPxhDq2CZDs0R4iz6GQgReejbBvPCQ1l1omBLJ8=",
+  "Source": "signalrtimezone",
+  "BasePath": "_content/signalrtimezone",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
