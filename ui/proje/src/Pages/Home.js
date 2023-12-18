@@ -21,8 +21,11 @@ const Home = props =>{
     };
 
     useEffect(()=>{
-        getData();
-    },[])
+        if(userType){
+            getData();
+        }
+       
+    },[userType])
 
 
     return userType ? (
