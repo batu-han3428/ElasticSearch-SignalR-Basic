@@ -3,6 +3,7 @@ import { useState } from 'react';
 import TimezoneSelect from 'react-timezone-select';
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../Providers/AuthProvider";
+import { Button, Select, Form, Row, Col, notification} from 'antd';
 
 const UpdateData = () =>{
 
@@ -12,6 +13,7 @@ const UpdateData = () =>{
 
     const handleChange = (timezone) => {
         if (timezone && timezone.value) {
+            console.log(timezone)
             setSelectedTimezone(timezone);
         } else {
             setSelectedTimezone(null);
@@ -19,27 +21,31 @@ const UpdateData = () =>{
     };
 
     const companies = [
-        { companyId: 1, value: 'Monitör CRO' },
-        { companyId: 2, value: 'Medcase' },
-        { companyId: 3, value: 'Amazon' },
-        { companyId: 4, value: 'Microsoft' },
-        { companyId: 5, value: 'Alphabet' },
-        { companyId: 6, value: 'Meta' },
-        { companyId: 7, value: 'Tesla' },
+        { value: 1, label: 'Monitör CRO' },
+        { value: 2, label: 'Medcase' },
+        { value: 3, label: 'Amazon' },
+        { value: 4, label: 'Microsoft' },
+        { value: 5, label: 'Alphabet' },
+        { value: 6, label: 'Meta' },
+        { value: 7, label: 'Tesla' },
     ];
 
     const [selectedCompany, setSelectedCompany] = useState(null);
 
     const handleCompanyChange = (event) => {
-        const selectedCompanyId = parseInt(event.target.value, 10);
-        const selectedCompany = companies.find(company => company.companyId === selectedCompanyId);
+        const selectedCompany = companies.find(company => company.value === event);
         setSelectedCompany(selectedCompany);
+        getCompanyTimeZone(event);
     };
+
+    const filterOption = (input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
 
     const updateTimeZone = async (companyId, newTimeZone) => {
         
         if(companyId === null || newTimeZone === null){
-            alert('Alanlar boş bırakılamaz');
+            notification.info({
+                message: 'Alanlar boş bırakılamaz'
+            });
             return;
         }
 
@@ -48,38 +54,77 @@ const UpdateData = () =>{
                 companyId: companyId,
                 timeZone: newTimeZone,
             });
-      
-            alert(response.data);
+
+            notification.info({
+                message: response.data
+            });
         } catch (error) {
-            alert('Beklenmeyen bir hata:', error);
+            notification.error({
+                message: 'Beklenmeyen bir hata',
+                description: error
+            });
         }
     };
 
+    const getCompanyTimeZone = async (companyId) => {
+        try {
+            const response = await axios.get(`https://localhost:7108/api/TimeZone/getCompanyTimeZone?companyId=${companyId}`);
+            if(response.status === 200){
+                setSelectedTimezone({value:response.data.timeZone})
+            }else{
+                setSelectedTimezone(null);
+            }
+        } catch (error) {
+            notification.error({
+                message: 'Beklenmeyen bir hata',
+                description: error
+            });
+        }
+    }
+
     return userType ? (
-        <>
-                <button onClick={()=>logout()}>Çıkış</button>
-        <div>
-            <label htmlFor="companySelect">Şirket Seç:</label>
-            <select id="companySelect" onChange={handleCompanyChange} value={selectedCompany?.companyId || ''}>
-                <option value="" disabled>Şirket Seçiniz</option>
-                {companies.map(company => (
-                <option key={company.companyId} value={company.companyId}>
-                    {company.value}
-                </option>
-                ))}
-            </select>
-        </div>
-        <div>
-            <label htmlFor="timezoneSelect">Saat Dilimi Seç:</label>
-            <TimezoneSelect
-                value={selectedTimezone || ""}
-                onChange={handleChange}
-                className="timezone-select"
-                id="timezoneSelect"
-            />
-        </div>
-        <button onClick={()=>updateTimeZone(selectedCompany ? selectedCompany.companyId : null, selectedTimezone ? selectedTimezone.value : null)}>Time Zone güncelle</button>
-        </>
+        <Row justify="center" align="middle" style={{ minHeight: '100vh' }}>
+            <Col span={10}>
+                <Form
+                    name="basic"
+                    labelCol={{
+                    span: 8,
+                    }}
+                    wrapperCol={{
+                    span: 16,
+                    }}
+                    style={{
+                        maxWidth: 600,
+                        clear:"both"
+                    }}
+                    initialValues={{
+                    remember: true,
+                    }}
+                    autoComplete="off"
+                >
+                    <Form.Item label="Kullanıcı Adı">
+                        <Select
+                            showSearch
+                            placeholder="Select a company"
+                            optionFilterProp="children"
+                            onChange={handleCompanyChange}
+                            filterOption={filterOption}
+                            options={companies}
+                        />
+                    </Form.Item>
+                    <Form.Item label="Saat Dilimi">
+                        <TimezoneSelect
+                            value={selectedTimezone || ""}
+                            onChange={handleChange}
+                            className="timezone-select"
+                            id="timezoneSelect"
+                        />
+                    </Form.Item>
+                    <Button style={{float:"Right", margin:"5px"}} onClick={()=>updateTimeZone(selectedCompany ? selectedCompany.value : null, selectedTimezone ? selectedTimezone.value : null)} type="primary">Güncelle</Button>          
+                    <Button style={{ float:"Right", margin:"5px" }} onClick={() => logout()} type="primary">Çıkış</Button>
+                </Form>
+            </Col>
+        </Row>
     ): (
         <Navigate to="/login" />
     )

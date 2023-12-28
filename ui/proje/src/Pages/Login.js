@@ -1,51 +1,83 @@
-import React, {useState} from 'react';
+import React, {useEffect} from 'react';
 import { useAuth } from '../Providers/AuthProvider';
+import { Button, Select, Form, Row, Col} from 'antd';
 
 const Login = () => {
 
   const { loginAsAdmin, loginAsCompany } = useAuth();
 
   const companies = [
-    { companyId: 1, value: 'Monitör CRO' },
-    { companyId: 2, value: 'Medcase' },
-    { companyId: 3, value: 'Amazon' },
-    { companyId: 4, value: 'Microsoft' },
-    { companyId: 5, value: 'Alphabet' },
-    { companyId: 6, value: 'Meta' },
-    { companyId: 7, value: 'Tesla' },
-];
+    { value: 1, label: 'Monitör CRO' },
+    { value: 2, label: 'Medcase' },
+    { value: 3, label: 'Amazon' },
+    { value: 4, label: 'Microsoft' },
+    { value: 5, label: 'Alphabet' },
+    { value: 6, label: 'Meta' },
+    { value: 7, label: 'Tesla' },
+  ];
 
-const [selectedCompany, setSelectedCompany] = useState(null);
+  const handleCompanyChange = (event) => {
+    handleLogin("company", event, loginAsCompany)
+  };
 
-const handleCompanyChange = (event) => {
-    const selectedCompanyId = parseInt(event.target.value, 10);
-    const selectedCompany = companies.find(company => company.companyId === selectedCompanyId);
-    setSelectedCompany(selectedCompany);
-    handleLogin("company", selectedCompanyId, loginAsCompany)
-};
+  const handleLogin = (userType, companyId = null) => {
+    if (userType === 'admin') {
+      loginAsAdmin();
+    } else if (userType === 'company') {
+      loginAsCompany(companyId);
+    }
+  };
 
-const handleLogin = (userType, companyId = null) => {
-  if (userType === 'admin') {
-    loginAsAdmin();
-  } else if (userType === 'company') {
-    loginAsCompany(companyId);
-  }
-};
+  const filterOption = (input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
+
+  useEffect(() => {
+    const selectElement = document.querySelector('.ant-select');
+    if (selectElement) {
+      const parentElement = selectElement.parentNode;
+      const grandparentElement = parentElement.parentNode;
+      const greatGrandparentElement = grandparentElement.parentNode;
+      greatGrandparentElement.style.margin = '0 auto';
+    }
+  }, []); 
 
   return (
-    <div>
-      <h2>Login</h2>
-      <button onClick={() => handleLogin('admin', loginAsAdmin)}>Login as Admin</button><br/>
-      or <br/>
-      <select id="companySelect" onChange={handleCompanyChange} value={selectedCompany?.companyId || ''}>
-                <option value="" disabled>Şirket Seçiniz</option>
-                {companies.map(company => (
-                <option key={company.companyId} value={company.companyId}>
-                    {company.value}
-                </option>
-                ))}
-            </select>
-    </div>
+    <Row justify="center" align="middle" style={{ minHeight: '100vh' }}>
+      <Col span={8}>
+        <Form
+            name="basic"
+            labelCol={{
+            span: 8,
+            }}
+            wrapperCol={{
+            span: 16,
+            }}
+            style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+              
+            initialValues={{
+            remember: true,
+            }}
+            autoComplete="off"
+        >
+            <Form.Item >
+            <Button onClick={() => handleLogin('admin', loginAsAdmin)} type="primary">Login as Admin</Button> 
+            </Form.Item>
+            <Form.Item>
+              <span>or</span>
+            </Form.Item>
+            <Form.Item style={{ width: '100%' }}>
+            <Select
+                    id="companySelect"
+                    showSearch
+                    placeholder="Select a company"
+                    optionFilterProp="children"
+                    onChange={handleCompanyChange}
+                    filterOption={filterOption}
+                    options={companies}
+                />
+            </Form.Item>
+        </Form>
+      </Col>
+    </Row>
   );
 };
 

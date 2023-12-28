@@ -27,15 +27,12 @@ export const SignalRProvider = ({children}) => {
     
 
       useEffect(() => {
-        console.log('effect')
         if (userType && userType === 'company') {
             hubConnection.start().then(() => {
-              console.log('Hub connection started');
               joinGroup(companyId);
             });
       
             hubConnection.on('ReceiveTimeZoneUpdate', (message) => {
-              console.log('ReceiveTimeZoneUpdate:', message);
               toast.success(message);
             });
           }
@@ -44,7 +41,6 @@ export const SignalRProvider = ({children}) => {
             if (hubConnection.state === 'Connected') {
               leaveGroup(companyId).then(() => {
                 hubConnection.stop().then(() => {
-                  console.log('Hub connection stopped');
                   setCompanyId(null);
                 });
               }).catch((error) => {
