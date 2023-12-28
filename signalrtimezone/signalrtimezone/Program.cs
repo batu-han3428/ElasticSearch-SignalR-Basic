@@ -28,7 +28,7 @@ builder.Services.AddSingleton<ITimeZoneService, TimeZoneService>();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowOrigin", builder => builder.WithOrigins("http://localhost:3000", "https://localhost:3000").AllowAnyHeader().AllowAnyMethod());
+    options.AddPolicy("AllowOrigin", builder => builder.WithOrigins("http://localhost:3000", "https://localhost:3000", "http://localhost:3001", "https://localhost:3001").AllowAnyHeader().AllowAnyMethod());
 });
 
 builder.Services.AddSignalR();

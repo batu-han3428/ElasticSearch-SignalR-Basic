@@ -33,11 +33,18 @@ namespace signalrtimezone.Controllers
             return Ok(GetListModel());
         }
 
+        [HttpGet("getCompanyTimeZone")]
+        public IActionResult GetCompanyTimeZone(int companyId)
+        {
+            var data = _timeZoneService.GetTimeZoneDocument(companyId);
+            return Ok(data);
+        }
+
         private List<DataModel> GetListModel()
         {
             return new List<DataModel>
             {
-                 new DataModel { Date = new DateTime(2022, 2, 24, 16, 52, 0), Value = "Rusya Dışişleri Bakanı Sergey Lavrov, Moskova'nın saldırılarına ilişkin, 'Bizi adalete ve BM prensiplerine döndürecek diyaloğa daima hazırız. Uluslararası hukuka ve sorumluluğa dönüş için hala bir şans olduğunu umuyoruz' dedi." },
+                new DataModel { Date = new DateTime(2022, 2, 24, 16, 52, 0), Value = "Rusya Dışişleri Bakanı Sergey Lavrov, Moskova'nın saldırılarına ilişkin, 'Bizi adalete ve BM prensiplerine döndürecek diyaloğa daima hazırız. Uluslararası hukuka ve sorumluluğa dönüş için hala bir şans olduğunu umuyoruz' dedi." },
                 new DataModel { Date = new DateTime(2022, 2, 24, 14, 55, 0), Value = "Rus istihbarat servisi Ukrayna sınır birliklerinin Rusya - Ukrayna sınırını terkettiğini iddia etti." },
                 new DataModel { Date = new DateTime(2022, 2, 24, 14, 30, 0), Value = "Kremlin'den operasyona ilişkin ilk açıklama geldi. Kremlin demir perde vurgusunun yapıldığı açıklamada operasyonun hedefine ulaşana kadar devam edeceğini bildirdi." },
                 new DataModel { Date = new DateTime(2022, 2, 24, 14, 5, 0), Value = "Rus haber ajansı Azak Denizi'nde iki Rus kargo gemisine Ukrayna füzesisi isabet ettiğini, ölü ve yaralıların olduğu bilgisini geçti." },
